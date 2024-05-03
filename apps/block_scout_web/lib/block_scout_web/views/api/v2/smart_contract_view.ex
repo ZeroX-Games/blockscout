@@ -220,12 +220,15 @@ defmodule BlockScoutWeb.API.V2.SmartContractView do
   end
 
   def prepare_smart_contract(address, conn) do
+    minimal_proxy_address_hash = address.implementation
     read_custom_abi? = AddressView.has_address_custom_abi_with_read_functions?(conn, address.hash)
     write_custom_abi? = AddressView.has_address_custom_abi_with_write_functions?(conn, address.hash)
 
     %{
       "has_custom_methods_read" => read_custom_abi?,
-      "has_custom_methods_write" => write_custom_abi?
+      "has_custom_methods_write" => write_custom_abi?,
+      "minimal_proxy_address_hash" =>
+        minimal_proxy_address_hash && Address.checksum(minimal_proxy_address_hash.address_hash)
     }
     |> Map.merge(bytecode_info(address))
   end
