@@ -1,4 +1,4 @@
-FROM hexpm/elixir:1.14.5-erlang-24.2.2-alpine-3.18.2 AS builder
+FROM hexpm/elixir:1.14.5-erlang-25.0.4-alpine-3.19.1 AS builder
 
 WORKDIR /app
 
@@ -43,7 +43,7 @@ ADD *.exs ./
 RUN apk add --update nodejs npm
 
 # Run forderground build and phoenix digest
-RUN mix compile && npm install npm@latest
+RUN mix compile
 
 # Add blockscout npm deps
 RUN cd apps/block_scout_web/assets/ && \
