@@ -204,6 +204,7 @@ defmodule Explorer.Chain.Transaction do
               max_priority_fee_per_gas: wei_per_gas | nil,
               max_fee_per_gas: wei_per_gas | nil,
               type: non_neg_integer() | nil,
+              zxTxType: non_neg_integer() | nil,
               has_error_in_internal_txs: boolean(),
               transaction_fee_log: any(),
               transaction_fee_token: any()
@@ -211,6 +212,7 @@ defmodule Explorer.Chain.Transaction do
             suave
           )
 
+  # Add more types for Suave chain
   if Application.compile_env(:explorer, :chain_type) == "suave" do
     @type suave :: %{
             execution_node: %Ecto.Association.NotLoaded{} | Address.t() | nil,
@@ -234,6 +236,7 @@ defmodule Explorer.Chain.Transaction do
     @type suave :: %{}
   end
 
+  # Defines how to encode the struct to JSON, only allowing the specified fields
   @derive {Poison.Encoder,
            only: [
              :block_number,
@@ -300,6 +303,7 @@ defmodule Explorer.Chain.Transaction do
     field(:max_priority_fee_per_gas, Wei)
     field(:max_fee_per_gas, Wei)
     field(:type, :integer)
+    field(:zxTxType, :integer)
     field(:has_error_in_internal_txs, :boolean)
     field(:has_token_transfers, :boolean, virtual: true)
 
