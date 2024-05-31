@@ -116,9 +116,10 @@ defmodule Indexer.Fetcher.PendingTransaction do
 
   defp task(%__MODULE__{json_rpc_named_arguments: json_rpc_named_arguments} = _state) do
     Logger.metadata(fetcher: :pending_transaction)
-
+    Logger.info(fn -> ["JSON RPC - Fetch Pending Txns: ", inspect(json_rpc_named_arguments)] end, step: :import)
     case fetch_pending_transactions(json_rpc_named_arguments) do
       {:ok, transactions_params} ->
+        Logger.info(fn -> ["JSON RPC Here ->>>> Fetch Pending Txns: ", inspect(transactions_params)] end, step: :import)
         new_last_fetched_at = NaiveDateTime.utc_now()
 
         transactions_params
@@ -165,7 +166,7 @@ defmodule Indexer.Fetcher.PendingTransaction do
 
   defp import_chunk(transactions_params) do
     addresses_params = Addresses.extract_addresses(%{transactions: transactions_params}, pending: true)
-
+    Logger.info(fn -> ["IMporting pending transactions: ", inspect(transactions_params)] end, step: :import)
     # There's no need to queue up fetching the address balance since theses are pending transactions and cannot have
     # affected the address balance yet since address balance is a balance at a given block and these transactions are
     # blockless.

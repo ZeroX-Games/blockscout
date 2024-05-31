@@ -65,6 +65,7 @@ defmodule EthereumJSONRPC.Transaction do
           to_address_hash: EthereumJSONRPC.address(),
           v: non_neg_integer(),
           value: non_neg_integer(),
+          zxTxType: non_neg_integer(),
           transaction_index: non_neg_integer(),
           max_priority_fee_per_gas: non_neg_integer(),
           max_fee_per_gas: non_neg_integer(),
@@ -82,6 +83,7 @@ defmodule EthereumJSONRPC.Transaction do
           wrapped_v: non_neg_integer(),
           wrapped_r: non_neg_integer(),
           wrapped_s: non_neg_integer(),
+          wrapped_zxTxType: non_neg_integer(),
           wrapped_hash: EthereumJSONRPC.hash()
         }
 
@@ -187,6 +189,7 @@ defmodule EthereumJSONRPC.Transaction do
           "v" => v,
           "value" => value,
           "type" => type,
+          "zxTxType" => zxTxType,
           "maxPriorityFeePerGas" => max_priority_fee_per_gas,
           "maxFeePerGas" => max_fee_per_gas,
           "executionNode" => execution_node_hash,
@@ -210,6 +213,7 @@ defmodule EthereumJSONRPC.Transaction do
       value: value,
       transaction_index: index,
       type: type,
+      zxTxType: zxTxType,
       max_priority_fee_per_gas: max_priority_fee_per_gas,
       max_fee_per_gas: max_fee_per_gas
     }
@@ -260,6 +264,7 @@ defmodule EthereumJSONRPC.Transaction do
           "v" => v,
           "value" => value,
           "type" => type,
+          "zxTxType" => zxTxType,
           "maxPriorityFeePerGas" => max_priority_fee_per_gas,
           "maxFeePerGas" => max_fee_per_gas
         } = transaction
@@ -281,6 +286,7 @@ defmodule EthereumJSONRPC.Transaction do
       value: value,
       transaction_index: index,
       type: type,
+      zxTxType: zxTxType,
       max_priority_fee_per_gas: max_priority_fee_per_gas,
       max_fee_per_gas: max_fee_per_gas
     }
@@ -309,6 +315,7 @@ defmodule EthereumJSONRPC.Transaction do
           "v" => v,
           "value" => value,
           "type" => type,
+          "zxTxType" => zxTxType,
           "maxPriorityFeePerGas" => max_priority_fee_per_gas,
           "maxFeePerGas" => max_fee_per_gas
         } = transaction
@@ -330,6 +337,7 @@ defmodule EthereumJSONRPC.Transaction do
       value: value,
       transaction_index: index,
       type: type,
+      zxTxType: zxTxType,
       max_priority_fee_per_gas: max_priority_fee_per_gas,
       max_fee_per_gas: max_fee_per_gas
     }
@@ -358,6 +366,7 @@ defmodule EthereumJSONRPC.Transaction do
           "v" => v,
           "value" => value,
           "type" => type,
+          "zxTxType" => zxTxType,
           "executionNode" => execution_node_hash,
           "requestRecord" => wrapped
         } = transaction
@@ -377,6 +386,7 @@ defmodule EthereumJSONRPC.Transaction do
       to_address_hash: to_address_hash,
       v: v,
       value: value,
+      zxTxType: zxTxType,
       transaction_index: index,
       type: type
     }
@@ -426,7 +436,8 @@ defmodule EthereumJSONRPC.Transaction do
           "transactionIndex" => index,
           "v" => v,
           "value" => value,
-          "type" => type
+          "type" => type,
+          "zxTxType" => zxTxType,
         } = transaction
       ) do
     result = %{
@@ -445,7 +456,9 @@ defmodule EthereumJSONRPC.Transaction do
       v: v,
       value: value,
       transaction_index: index,
-      type: type
+      type: type,
+      zxTxType: zxTxType
+
     }
 
     put_if_present(transaction, result, [
@@ -469,7 +482,8 @@ defmodule EthereumJSONRPC.Transaction do
           "to" => to_address_hash,
           "transactionIndex" => index,
           "v" => v,
-          "value" => value
+          "value" => value,
+          "zxTxType" => zxTxType
         } = transaction
       ) do
     result = %{
@@ -487,7 +501,8 @@ defmodule EthereumJSONRPC.Transaction do
       to_address_hash: to_address_hash,
       v: v,
       value: value,
-      transaction_index: index
+      transaction_index: index,
+      zxTxType: zxTxType
     }
 
     put_if_present(transaction, result, [
@@ -613,7 +628,7 @@ defmodule EthereumJSONRPC.Transaction do
     do: {"input", value}
 
   defp entry_to_elixir({key, quantity})
-       when key in ~w(gas gasPrice nonce r s standardV v value type maxPriorityFeePerGas maxFeePerGas) and
+       when key in ~w(gas gasPrice nonce r s standardV v value type zxTxType maxPriorityFeePerGas maxFeePerGas) and
               quantity != nil do
     {key, quantity_to_integer(quantity)}
   end

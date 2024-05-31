@@ -38,7 +38,7 @@ defmodule Explorer.Chain.Transaction do
   alias Explorer.SmartContract.SigProviderInterface
 
   @optional_attrs ~w(max_priority_fee_per_gas max_fee_per_gas block_hash block_number block_consensus block_timestamp created_contract_address_hash cumulative_gas_used earliest_processing_start
-                     error gas_price gas_used index created_contract_code_indexed_at status to_address_hash revert_reason type has_error_in_internal_txs)a
+                     error gas_price gas_used index created_contract_code_indexed_at status to_address_hash revert_reason type zxTxType has_error_in_internal_txs)a
 
   @suave_optional_attrs ~w(execution_node_hash wrapped_type wrapped_nonce wrapped_to_address_hash wrapped_gas wrapped_gas_price wrapped_max_priority_fee_per_gas wrapped_max_fee_per_gas wrapped_value wrapped_input wrapped_v wrapped_r wrapped_s wrapped_hash)a
 
@@ -255,7 +255,8 @@ defmodule Explorer.Chain.Transaction do
              :v,
              :status,
              :value,
-             :revert_reason
+             :revert_reason,
+             :zxTxType
            ]}
 
   @derive {Jason.Encoder,
@@ -276,7 +277,8 @@ defmodule Explorer.Chain.Transaction do
              :v,
              :status,
              :value,
-             :revert_reason
+             :revert_reason,
+             :zxTxType
            ]}
 
   @primary_key {:hash, Hash.Full, autogenerate: false}
@@ -539,6 +541,8 @@ defmodule Explorer.Chain.Transaction do
 
   """
   def changeset(%__MODULE__{} = transaction, attrs \\ %{}) do
+    Logger.info("Testaaa. Transaction changeset: #{inspect(attrs)}")
+    Logger.info("Testaaa. Transaction: #{inspect(transaction)}")
     attrs_to_cast =
       @required_attrs ++
         @optional_attrs ++
