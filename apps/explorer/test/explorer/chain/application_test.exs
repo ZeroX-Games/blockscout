@@ -1,0 +1,27 @@
+defmodule Explorer.Chain.ApplicationTest do
+  use Explorer.DataCase
+
+  import Mox
+
+  alias Ecto.Changeset
+  alias Explorer.Chain.{Address, Application}
+
+  describe "changeset" do
+    setup do
+      smart_contract_bytecode =
+        "0x608060405234801561001057600080fd5b5060df8061001f6000396000f3006080604052600436106049576000357c0100000000000000000000000000000000000000000000000000000000900463ffffffff16806360fe47b114604e5780636d4ce63c146078575b600080fd5b348015605957600080fd5b5060766004803603810190808035906020019092919050505060a0565b005b348015608357600080fd5b50608a60aa565b6040518082815260200191505060405180910390f35b8060008190555050565b600080549050905600a165627a7a7230582040d82a7379b1ee1632ad4d8a239954fd940277b25628ead95259a85c5eddb2120029"
+
+      created_contract_address =
+        insert(
+          :address,
+          hash: "0x0f95fa9bc0383e699325f2658d04e8d96d87b90c",
+          contract_code: smart_contract_bytecode
+        )
+
+      transaction =
+        :transaction
+        |> insert()
+        |> with_block()
+    end
+  end
+end
