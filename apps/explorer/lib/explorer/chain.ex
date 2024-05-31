@@ -1722,6 +1722,13 @@ defmodule Explorer.Chain do
   end
 
   @doc """
+  Finds the transaction by the hash.
+  """
+  def get_transaction_by_hash(hash) do
+    Repo.get_by(Transaction, hash: hash)
+  end
+
+  @doc """
   Finds all Blocks validated by the address with the given hash.
 
     ## Options
