@@ -381,7 +381,7 @@ defmodule BlockScoutWeb.API.V2.TransactionView do
 
     result = %{
       "hash" => transaction.hash,
-      "zxTxType" => transacion.zxTxType,
+      "zxTxType" => transaction.zxTxType,
       "result" => status,
       "status" => transaction.status,
       "block" => transaction.block_number,
