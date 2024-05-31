@@ -541,8 +541,6 @@ defmodule Explorer.Chain.Transaction do
 
   """
   def changeset(%__MODULE__{} = transaction, attrs \\ %{}) do
-    Logger.info("Testaaa. Transaction changeset: #{inspect(attrs)}")
-    Logger.info("Testaaa. Transaction: #{inspect(transaction)}")
     attrs_to_cast =
       @required_attrs ++
         @optional_attrs ++

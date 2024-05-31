@@ -119,7 +119,6 @@ defmodule Indexer.Fetcher.PendingTransaction do
     Logger.info(fn -> ["JSON RPC - Fetch Pending Txns: ", inspect(json_rpc_named_arguments)] end, step: :import)
     case fetch_pending_transactions(json_rpc_named_arguments) do
       {:ok, transactions_params} ->
-        Logger.info(fn -> ["JSON RPC Here ->>>> Fetch Pending Txns: ", inspect(transactions_params)] end, step: :import)
         new_last_fetched_at = NaiveDateTime.utc_now()
 
         transactions_params
