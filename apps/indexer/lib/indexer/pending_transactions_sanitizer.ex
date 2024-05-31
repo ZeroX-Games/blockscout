@@ -78,6 +78,11 @@ defmodule Indexer.PendingTransactionsSanitizer do
              |> json_rpc(json_rpc_named_arguments) do
         if result do
           fetch_block_and_invalidate_wrapper(pending_tx, pending_tx_hash_str, result)
+
+          # check if pending_tx.zxTxType is 1 or not, if is 1, we should store pending_tx.created_contract_hash in the DB in Application table
+          if pending_tx.zxTxType == 1 do
+            fetch_deployed_smart_contract(pending_tx, ind, json_rpc_named_arguments)
+          end
         else
           Logger.debug(
             "Transaction with hash #{pending_tx_hash_str} doesn't exist in the node anymore. We should remove it from Blockscout DB.",
@@ -109,6 +114,39 @@ defmodule Indexer.PendingTransactionsSanitizer do
         "Transaction with hash #{pending_tx_hash_str} is still pending. Do nothing.",
         fetcher: :pending_transactions_to_refetch
       )
+    end
+  end
+
+  defp fetch_deployed_smart_contract(pending_tx, ind, json_rpc_named_arguments) do
+    Logger.debug(
+      "Transaction with hash #{pending_tx.created_contract_address_hash} is a contract creation transaction. We should store it in the Application table.",
+      fetcher: :pending_transactions_to_refetch
+    )
+
+    # store pending_tx.created_contract_hash in the DB in Application table
+    created_contract_address_hash = "0x" <> Base.encode16(pending_tx.created_contract_address_hash.bytes, case: :lower)
+
+    Logger.debug(
+      "Created contract address hash: #{created_contract_address_hash}",
+      fetcher: :pending_transactions_to_refetch
+    )
+
+    with {:ok, result} <-
+           %{id: ind, method: "eth_getApplicationDetails", params: [created_contract_address_hash]}
+           |> request()
+           |> json_rpc(json_rpc_named_arguments) do
+      if result do
+        Logger.debug(
+          "Contract with address #{created_contract_address_hash} is deployed. We should store it in the Application table.
+          result: #{inspect(result)}",
+          fetcher: :pending_transactions_to_refetch
+        )
+      else
+        Logger.debug(
+          "Contract with address #{created_contract_address_hash} is not deployed yet. Do nothing.",
+          fetcher: :pending_transactions_to_refetch
+        )
+      end
     end
   end
 
