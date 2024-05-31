@@ -1,0 +1,16 @@
+name: Docker compose CI
+
+on:
+  push:
+    branches: [ "prod" ]
+  pull_request:
+    branches: [ "prod" ]
+
+jobs:
+  compose:
+    name: docker compose ci
+    runs-on: self-hosted
+    steps:
+    - uses: actions/checkout@v4
+    - name: Compose docker for custom backend
+      run: docker compose -d -f ./custom-backend.yml up --build --force-recreate
