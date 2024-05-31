@@ -13,4 +13,5 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     - name: Compose docker for custom backend
+      working-directory: ./docker-compose
       run: docker compose -f ./custom-backend.yml up -d --build --force-recreate
