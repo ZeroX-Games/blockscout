@@ -37,6 +37,7 @@ defmodule EthereumJSONRPC do
     Receipts,
     RequestCoordinator,
     Subscription,
+    TransactionApplication,
     Transport,
     Utility.EndpointAvailabilityObserver,
     Utility.RangesHelper,
@@ -384,6 +385,10 @@ defmodule EthereumJSONRPC do
         ) :: {:ok, %{logs: list(), receipts: list()}} | {:error, reason :: term}
   def fetch_transaction_receipts(transactions_params, json_rpc_named_arguments) when is_list(transactions_params) do
     Receipts.fetch(transactions_params, json_rpc_named_arguments)
+  end
+
+  def fetch_transaction_applications(transactions_params, json_rpc_named_arguments) when is_list(transactions_params) do
+    TransactionApplication.fetch(transactions_params, json_rpc_named_arguments)
   end
 
   @doc """
