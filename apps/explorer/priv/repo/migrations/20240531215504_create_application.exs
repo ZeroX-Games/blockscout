@@ -3,7 +3,8 @@ defmodule Explorer.Repo.Migrations.CreateApplication do
 
   def change do
     create table(:applications, primary_key: false) do
-      add(:hash, :bytea, null: false, primary_key: true)
+      add(:txHash, :bytea, null: false, primary_key: true)
+      add(:contract_address_hash, references(:addresses, column: :hash, on_delete: :delete_all, type: :bytea), null: true)
       add(:name, :string, null: true)
       add(:description, :string, null: true)
       timestamps()

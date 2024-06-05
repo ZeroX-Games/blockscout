@@ -5,26 +5,32 @@ defmodule Explorer.Chain.Application do
   alias Explorer.Chain.{Hash}
 
   @type t :: %__MODULE__{
-          name: String.t() | nil,
-          description: String.t() | nil
+          txHash: Hash.t(),
+          contract_address: %Ecto.Association.NotLoaded{} | Address.t() | nil,
+          contract_address_hash: Hash.Address.t() | nil,
         }
 
-  @primary_key {:hash, Hash.Address, autogenerate: false}
+  @primary_key {:txHash, Hash.Full, autogenerate: false}
   schema "applications" do
-    field(:name, :string)
-    field(:description, :string)
+    belongs_to(
+      :contract_address,
+      Address,
+      foreign_key: :contract_address_hash,
+      references: :hash,
+      type: Hash.Address
+    )
     timestamps()
   end
 
   def changeset(%__MODULE__{} = smart_contract, attrs) do
     smart_contract
     |> cast(attrs, [
-      :name,
-      :description
+      :txHash,
+      :contract_address_hash
     ])
     |> validate_required([
-      :hash
+      :txHash
     ])
-    |> unique_constraint(:hash)
+    |> unique_constraint(:txHash)
   end
 end

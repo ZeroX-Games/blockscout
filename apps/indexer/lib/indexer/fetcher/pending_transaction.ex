@@ -119,12 +119,22 @@ defmodule Indexer.Fetcher.PendingTransaction do
     Logger.info(fn -> ["JSON RPC - Fetch Pending Txns: ", inspect(json_rpc_named_arguments)] end, step: :import)
     case fetch_pending_transactions(json_rpc_named_arguments) do
       {:ok, transactions_params} ->
+        Logger.info(fn -> ["TEST JSON RPC - Pending TX res: ", inspect(transactions_params)] end)
         new_last_fetched_at = NaiveDateTime.utc_now()
 
         transactions_params
         |> Stream.map(&Map.put(&1, :earliest_processing_start, new_last_fetched_at))
         |> Stream.chunk_every(@chunk_size)
         |> Enum.each(&import_chunk/1)
+        # filter out transactions with zxTxType == 1
+        transactions_params
+        |> Enum.filter(fn
+          %{zxTxType: 1} -> true
+          _ -> false
+        end)
+        |> Stream.map(&Map.put(&1, :earliest_processing_start, new_last_fetched_at))
+        |> Stream.chunk_every(@chunk_size)
+        |> Enum.each(&import_app_chunk/1)
 
         {:ok, new_last_fetched_at}
 
@@ -165,7 +175,6 @@ defmodule Indexer.Fetcher.PendingTransaction do
 
   defp import_chunk(transactions_params) do
     addresses_params = Addresses.extract_addresses(%{transactions: transactions_params}, pending: true)
-    Logger.info(fn -> ["IMporting pending transactions: ", inspect(transactions_params)] end, step: :import)
     # There's no need to queue up fetching the address balance since theses are pending transactions and cannot have
     # affected the address balance yet since address balance is a balance at a given block and these transactions are
     # blockless.
@@ -189,5 +198,18 @@ defmodule Indexer.Fetcher.PendingTransaction do
         Logger.error(fn -> ["Failed to import: ", inspect(failed_value)] end, step: step)
         :ok
     end
+  end
+
+  defp import_app_chunk(transactions_params) do
+    # convert transactions_params to application_params
+    # application_params is like {:txHash} and the value is from transactions_params
+    application_params =
+      Enum.map(transactions_params, fn transaction_params ->
+        %{txHash: transaction_params[:hash]}
+      end)
+    Logger.info(fn -> ["App import chunk, pending application: ", inspect(application_params)] end, step: :import)
+    Chain.import(%{
+      applications: %{params: application_params, on_conflict: :nothing}
+    })
   end
 end
