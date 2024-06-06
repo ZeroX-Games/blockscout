@@ -102,6 +102,11 @@ defmodule Indexer.Transform.Addresses do
         %{from: :wrapped_to_address_hash, to: :hash}
       ]
     ],
+    applications: [
+      [
+        %{from: :contract_address_hash, to: :hash}
+      ]
+    ],
     logs: [
       [
         %{from: :block_number, to: :fetched_coin_balance_block_number},
@@ -411,6 +416,11 @@ defmodule Indexer.Transform.Addresses do
               optional(:created_contract_address_hash) => String.t(),
               optional(:execution_node_hash) => String.t(),
               optional(:wrapped_to_address_hash) => String.t()
+            }
+          ],
+          optional(:applications) => [
+            %{
+              required(:contract_address_hash) => String.t(),
             }
           ],
           optional(:logs) => [

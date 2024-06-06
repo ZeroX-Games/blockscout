@@ -47,6 +47,8 @@ defmodule Indexer.MixProject do
       {:explorer, in_umbrella: true},
       # ex_secp256k1 crypto functions
       {:ex_secp256k1, "~> 0.7.0"},
+      # ex_keccak provides the keccak hash function
+      {:ex_keccak, "~> 0.7.4"},
       # Log errors and application output to separate files
       {:logger_file_backend, "~> 0.0.10"},
       # Mocking `EthereumJSONRPC.Transport`, so we avoid hitting real chains for local testing

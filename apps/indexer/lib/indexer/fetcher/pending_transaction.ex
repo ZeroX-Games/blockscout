@@ -17,6 +17,7 @@ defmodule Indexer.Fetcher.PendingTransaction do
   alias Explorer.Chain.Cache.Accounts
   alias Indexer.Fetcher.PendingTransaction
   alias Indexer.Transform.Addresses
+  alias Indexer.Transform.Applications
 
   @chunk_size 250
 
@@ -203,12 +204,15 @@ defmodule Indexer.Fetcher.PendingTransaction do
   defp import_app_chunk(transactions_params) do
     # convert transactions_params to application_params
     # application_params is like {:txHash} and the value is from transactions_params
+    transformed_transactions_params = Enum.map(transactions_params, &Applications.transform_application/1)
     application_params =
-      Enum.map(transactions_params, fn transaction_params ->
-        %{txHash: transaction_params[:hash]}
+      Enum.map(transformed_transactions_params, fn transaction_params ->
+        %{txHash: transaction_params[:hash], contract_address_hash: transaction_params[:contract_address_hash]}
       end)
-    Logger.info(fn -> ["App import chunk, pending application: ", inspect(application_params)] end, step: :import)
+
+    addresses_params = Addresses.extract_addresses(%{applications: application_params}, pending: true)
     Chain.import(%{
+      addresses: %{params: addresses_params, on_conflict: :nothing},
       applications: %{params: application_params, on_conflict: :nothing}
     })
   end
