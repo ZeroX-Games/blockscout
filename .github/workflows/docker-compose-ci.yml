@@ -9,6 +9,10 @@ jobs:
     name: docker compose ci
     runs-on: self-hosted
     steps:
+    - name: (PROD only) Spin down docker and clean up volumes
+      if: github.ref == 'refs/heads/prod'
+      working-directory: ./docker-compose
+      run: docker compose -f ./custom-backend.yml down -v
     - uses: actions/checkout@v4
       with:
         clean: false
