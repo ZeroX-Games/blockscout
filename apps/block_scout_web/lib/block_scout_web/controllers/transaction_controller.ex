@@ -237,4 +237,22 @@ defmodule BlockScoutWeb.TransactionController do
     |> put_view(TransactionView)
     |> render("not_found.html", transaction_hash: transaction_hash_string)
   end
+
+  def zx_tx_type(conn, %{"hash" => hash}) do
+    case Chain.get_transaction_by_hash(hash) do
+      nil ->
+        conn
+        |> put_status(:not_found)
+        |> json(%{error: "Transaction not found"})
+
+      transaction ->
+        zx_tx_type = extract_zx_tx_type(transaction)
+        json(conn, %{zxTxType: zx_tx_type})
+    end
+  end
+
+  defp extract_zx_tx_type(transaction) do
+    transaction.zxTxType
+  end
+
 end

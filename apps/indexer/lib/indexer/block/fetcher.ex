@@ -15,7 +15,7 @@ defmodule Indexer.Block.Fetcher do
   alias Explorer.Chain.Block.Reward
   alias Explorer.Chain.Cache.Blocks, as: BlocksCache
   alias Explorer.Chain.Cache.{Accounts, BlockNumber, Transactions, Uncles}
-  alias Indexer.Block.Fetcher.Receipts
+  alias Indexer.Block.Fetcher.{Applications, Receipts}
   alias Indexer.Fetcher.TokenInstance.Realtime, as: TokenInstanceRealtime
 
   alias Indexer.Fetcher.{
@@ -140,6 +140,9 @@ defmodule Indexer.Block.Fetcher do
            }}} <- {:blocks, fetched_blocks},
          blocks = TransformBlocks.transform_blocks(blocks_params),
          {:receipts, {:ok, receipt_params}} <- {:receipts, Receipts.fetch(state, transactions_params_without_receipts)},
+        #  Logger.info("start fetching applications"),
+        #  apps = Applications.fetch(state, transactions_params_without_receipts),
+        #  Logger.info("fetching app finished" <> inspect(apps)),
          %{logs: logs, receipts: receipts} = receipt_params,
          transactions_with_receipts = Receipts.put(transactions_params_without_receipts, receipts),
          %{token_transfers: token_transfers, tokens: tokens} = TokenTransfers.parse(logs),

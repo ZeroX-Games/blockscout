@@ -344,6 +344,8 @@ defmodule BlockScoutWeb.ApiRouter do
     alias BlockScoutWeb.API.V1.{GasPriceOracleController, HealthController}
     alias BlockScoutWeb.API.V2.SearchController
 
+    # zxTxType route
+    get("/transaction/:hash/zx_tx_type", TransactionController, :zx_tx_type)
     # leave the same endpoint in v1 in order to keep backward compatibility
     get("/search", SearchController, :search)
 
