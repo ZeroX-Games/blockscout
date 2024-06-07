@@ -188,13 +188,13 @@ defmodule BlockScoutWeb.API.V2.TransactionController do
       if is_nil(transaction.block_number) || zerox_tx_type == 0 do
         conn
         |> put_status(200)
-        |> render(:zerox_transaction, %{zerox_transaction: nil})
+        |> render(:zerox_transaction, nil)
       else
         zerox_transaction = Chain.get_zerox_transaction_by_hash(transaction_hash_string)
 
         conn
         |> put_status(200)
-        |> render(:zerox_transaction, %{zerox_transaction: zerox_transaction})
+        |> render(:zerox_transaction, zerox_transaction)
       end
     end
   end

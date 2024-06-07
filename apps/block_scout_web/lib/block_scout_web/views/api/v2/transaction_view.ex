@@ -103,8 +103,13 @@ defmodule BlockScoutWeb.API.V2.TransactionView do
     InternalTransaction.internal_transactions_to_raw(internal_transactions)
   end
 
-  def render("zerox_transaction.json", %{zerox_transaction: zerox_transaction, conn: conn}) do
-    %{"zerox_transaction" => zerox_transaction}
+  def render("zerox_transaction.json", nil) do
+    # returns an empty JSON object
+    %{}
+  end
+
+  def render("zerox_transaction.json", data) do
+    data
   end
 
   def render("decoded_log_input.json", %{method_id: method_id, text: text, mapping: mapping}) do
