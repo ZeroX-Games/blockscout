@@ -176,6 +176,30 @@ defmodule BlockScoutWeb.API.V2.TransactionController do
   end
 
   @doc """
+    Function to handle GET requests to `/api/v2/transactions/:transaction_hash_param/zerox-transaction` endpoint.
+  """
+  @spec zerox_transaction(Plug.Conn.t(), map()) :: Plug.Conn.t() | {atom(), any()}
+  def zerox_transaction(
+        conn,
+        %{"transaction_hash_param" => transaction_hash_string, "zerox_tx_type" => zerox_tx_type} = params
+      ) do
+    with {:ok, transaction, _transaction_hash} <- validate_transaction(transaction_hash_string, params) do
+      # return empty or zerox_tx_type is 0 if transaction is not mined yet
+      if is_nil(transaction.block_number) || zerox_tx_type == 0 do
+        conn
+        |> put_status(200)
+        |> render(:zerox_transaction, %{zerox_transaction: nil})
+      else
+        zerox_transaction = Chain.get_zerox_transaction_by_hash(transaction_hash_string)
+
+        conn
+        |> put_status(200)
+        |> render(:zerox_transaction, %{zerox_transaction: zerox_transaction})
+      end
+    end
+  end
+
+  @doc """
     Function to handle GET requests to `/api/v2/transactions/:transaction_hash_param/raw-trace` endpoint.
   """
   @spec raw_trace(Plug.Conn.t(), map()) :: Plug.Conn.t() | {atom(), any()}
