@@ -11,7 +11,7 @@ jobs:
     steps:
     - name: Attempt to modify shared db files permissions (if exists)
       working-directory: ./docker-compose/services
-      run: chmod -R 777 ./blockscout-db-data ./stats-db-data
+      run: echo ${{ secrets.SHUSERPWD }} | sudo -S chmod -R 777 ./blockscout-db-data ./stats-db-data
       continue-on-error: true
     - name: (PROD only) Spin down docker and clean up volumes
       if: github.ref == 'refs/heads/prod'
