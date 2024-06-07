@@ -9,6 +9,9 @@ jobs:
     name: docker compose ci
     runs-on: self-hosted
     steps:
+    - name: Attempt to modify shared db files permissions (if exists)
+      run: chmod -R 777 ./services/blockscout-db-data ./services/stats-db-data
+      continue-on-error: true
     - name: (PROD only) Spin down docker and clean up volumes
       if: github.ref == 'refs/heads/prod'
       working-directory: ./docker-compose
