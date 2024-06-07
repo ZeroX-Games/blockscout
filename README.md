@@ -2,8 +2,10 @@
 <p align="center">Blockchain Explorer for inspecting and analyzing EVM Chains.</p>
 <div align="center">
 
+[![ZeroX Docker compose CI](https://github.com/ZeroX-Games/blockscout/actions/workflows/docker-compose-ci.yml/badge.svg?branch=prod)](https://github.com/ZeroX-Games/blockscout/actions/workflows/docker-compose-ci.yml)
 [![Blockscout](https://github.com/blockscout/blockscout/workflows/Blockscout/badge.svg?branch=master)](https://github.com/blockscout/blockscout/actions)
 [![](https://dcbadge.vercel.app/api/server/blockscout?style=flat)](https://discord.gg/blockscout)
+
 
 </div>
 
