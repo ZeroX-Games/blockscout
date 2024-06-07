@@ -47,7 +47,6 @@ defmodule Explorer.Chain do
     Address.CoinBalanceDaily,
     Address.CurrentTokenBalance,
     Address.TokenBalance,
-    Application,
     Block,
     CurrencyHelper,
     Data,
@@ -1733,7 +1732,7 @@ defmodule Explorer.Chain do
   Finds the ZeroX transaction by the hash.
   """
   def get_zerox_transaction_by_hash(hash) do
-    Repo.get_by(Application, txHash: hash)
+    Repo.get_by(Explorer.Chain.Application, txHash: hash)
   end
 
   @doc """
