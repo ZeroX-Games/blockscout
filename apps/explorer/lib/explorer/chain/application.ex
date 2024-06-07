@@ -10,6 +10,16 @@ defmodule Explorer.Chain.Application do
           contract_address_hash: Hash.Address.t() | nil
         }
 
+  # Defines how to encode the struct to JSON, only allowing the specified fields
+  @derive {Poison.Encoder,
+           only: [
+             :txHash
+           ]}
+  @derive {Jason.Encoder,
+           only: [
+             :txHash
+           ]}
+
   @primary_key {:txHash, Hash.Full, autogenerate: false}
   schema "applications" do
     belongs_to(
@@ -22,16 +32,6 @@ defmodule Explorer.Chain.Application do
 
     timestamps()
   end
-
-  # Defines how to encode the struct to JSON, only allowing the specified fields
-  @derive {Poison.Encoder,
-           only: [
-             :txHash
-           ]}
-  @derive {Jason.Encoder,
-           only: [
-             :txHash
-           ]}
 
   def changeset(%__MODULE__{} = smart_contract, attrs) do
     smart_contract
