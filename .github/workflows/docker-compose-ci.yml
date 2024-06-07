@@ -2,7 +2,9 @@ name: Docker compose CI
 
 on:
   push:
-    branches: [ "prod", "test" ]
+    branches: [ "prod" ]
+  pull_request:
+    branches: [ "test" ]
 
 jobs:
   compose:
