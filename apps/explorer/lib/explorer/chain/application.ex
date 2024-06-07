@@ -7,7 +7,7 @@ defmodule Explorer.Chain.Application do
   @type t :: %__MODULE__{
           txHash: Hash.t(),
           contract_address: %Ecto.Association.NotLoaded{} | Address.t() | nil,
-          contract_address_hash: Hash.Address.t() | nil,
+          contract_address_hash: Hash.Address.t() | nil
         }
 
   @primary_key {:txHash, Hash.Full, autogenerate: false}
@@ -19,8 +19,19 @@ defmodule Explorer.Chain.Application do
       references: :hash,
       type: Hash.Address
     )
+
     timestamps()
   end
+
+  # Defines how to encode the struct to JSON, only allowing the specified fields
+  @derive {Poison.Encoder,
+           only: [
+             :txHash
+           ]}
+  @derive {Jason.Encoder,
+           only: [
+             :txHash
+           ]}
 
   def changeset(%__MODULE__{} = smart_contract, attrs) do
     smart_contract
