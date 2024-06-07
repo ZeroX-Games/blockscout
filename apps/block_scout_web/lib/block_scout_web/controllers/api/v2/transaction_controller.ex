@@ -194,7 +194,7 @@ defmodule BlockScoutWeb.API.V2.TransactionController do
 
         conn
         |> put_status(200)
-        |> render(:zerox_transaction, zerox_transaction)
+        |> render(:zerox_transaction, %{zerox_transaction: zerox_transaction})
       end
     end
   end

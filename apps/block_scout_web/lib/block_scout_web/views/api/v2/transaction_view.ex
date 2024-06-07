@@ -108,8 +108,8 @@ defmodule BlockScoutWeb.API.V2.TransactionView do
     %{}
   end
 
-  def render("zerox_transaction.json", data) do
-    data
+  def render("zerox_transaction.json", %{zerox_transaction: zerox_transaction, conn: conn}) do
+    prepare_zerox_transaction(zerox_transaction, nil, true)
   end
 
   def render("decoded_log_input.json", %{method_id: method_id, text: text, mapping: mapping}) do
@@ -450,6 +450,21 @@ defmodule BlockScoutWeb.API.V2.TransactionView do
     result
     |> chain_type_fields(transaction, single_tx?, conn, watchlist_names)
     |> maybe_put_stability_fee(transaction)
+  end
+
+  defp prepare_zerox_transaction(%Explorer.Chain.Application{} = application, conn, single_tx?) do
+    result = %{
+      "txHash" => application.txHash,
+      "contract_address" =>
+        Helper.address_with_info(
+          single_tx? && conn,
+          application.contract_address,
+          application.contract_address_hash,
+          single_tx?
+        )
+    }
+
+    result
   end
 
   defp chain_type_fields(result, transaction, single_tx?, conn, watchlist_names) do
