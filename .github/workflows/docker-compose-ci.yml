@@ -13,9 +13,10 @@ jobs:
       working-directory: ./docker-compose/services
       run: echo ${{ secrets.SHUSERPWD }} | sudo -S chmod -R 777 ./blockscout-db-data ./stats-db-data
       continue-on-error: true
-    - name: Spin down 
+    - name: Spin down docker containers
       working-directory: ./docker-compose
       run: docker compose -f ./custom-backend.yml down -v
+      continue-on-error: true
     - uses: actions/checkout@v4
       with:
         clean: false
