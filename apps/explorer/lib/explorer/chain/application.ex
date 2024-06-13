@@ -10,6 +10,18 @@ defmodule Explorer.Chain.Application do
           contract_address_hash: Hash.Address.t() | nil
         }
 
+  # Defines how to encode the struct to JSON, only allowing the specified fields
+  @derive {Poison.Encoder,
+           only: [
+             :txHash,
+             :contract_address_hash
+           ]}
+  @derive {Jason.Encoder,
+           only: [
+             :txHash,
+             :contract_address_hash
+           ]}
+
   @primary_key {:txHash, Hash.Full, autogenerate: false}
   schema "applications" do
     belongs_to(
