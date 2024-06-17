@@ -8,6 +8,7 @@ defmodule Explorer.Chain.Import.Stage.BlockReferencing do
 
   @behaviour Stage
   @default_runners [
+    Runner.Applications,
     Runner.Transactions,
     Runner.Transaction.Forks,
     Runner.Logs,

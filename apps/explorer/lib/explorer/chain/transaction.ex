@@ -192,6 +192,7 @@ defmodule Explorer.Chain.Transaction.Schema do
         field(:max_priority_fee_per_gas, Wei)
         field(:max_fee_per_gas, Wei)
         field(:type, :integer)
+        field(:zxTxType, :integer)
         field(:has_error_in_internal_txs, :boolean)
         field(:has_token_transfers, :boolean, virtual: true)
 
@@ -285,7 +286,7 @@ defmodule Explorer.Chain.Transaction do
                      block_consensus block_timestamp created_contract_address_hash
                      cumulative_gas_used earliest_processing_start error gas_price
                      gas_used index created_contract_code_indexed_at status
-                     to_address_hash revert_reason type has_error_in_internal_txs r s v)a
+                     to_address_hash revert_reason type zxTxType has_error_in_internal_txs r s v)a
 
   @chain_type_optional_attrs (case Application.compile_env(:explorer, :chain_type) do
                                 :optimism ->
@@ -360,7 +361,8 @@ defmodule Explorer.Chain.Transaction do
              :v,
              :status,
              :value,
-             :revert_reason
+             :revert_reason,
+             :zxTxType
            ]}
 
   @derive {Jason.Encoder,
@@ -381,7 +383,8 @@ defmodule Explorer.Chain.Transaction do
              :v,
              :status,
              :value,
-             :revert_reason
+             :revert_reason,
+             :zxTxType
            ]}
 
   @typedoc """

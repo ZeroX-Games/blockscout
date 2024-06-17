@@ -2862,6 +2862,13 @@ defmodule Explorer.Chain do
   def string_to_transaction_hash(_), do: :error
 
   @doc """
+  Finds the transaction by the hash.
+  """
+  def get_transaction_by_hash(hash) do
+    Repo.get_by(Transaction, hash: hash)
+  end
+
+  @doc """
   Finds all `t:Explorer.Chain.Log.t/0`s for `t:Explorer.Chain.Transaction.t/0`.
 
   ## Options

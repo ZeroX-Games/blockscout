@@ -407,6 +407,7 @@ defmodule BlockScoutWeb.API.V2.TransactionView do
     result = %{
       "hash" => transaction.hash,
       "result" => status,
+      "zxTxType" => transaction.zxTxType,
       "status" => transaction.status,
       "block" => transaction.block_number,
       "timestamp" => block_timestamp(transaction),

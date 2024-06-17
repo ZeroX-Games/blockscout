@@ -126,6 +126,17 @@ defmodule Indexer.Fetcher.PendingTransaction do
         |> Stream.chunk_every(@chunk_size)
         |> Enum.each(&import_chunk/1)
 
+        # TODO: ZEROX ERC 404 transactions types
+        # # filter out transactions with zxTxType == 1
+        # transactions_params
+        # |> Enum.filter(fn
+        #   %{zxTxType: 1} -> true
+        #   _ -> false
+        # end)
+        # |> Stream.map(&Map.put(&1, :earliest_processing_start, new_last_fetched_at))
+        # |> Stream.chunk_every(@chunk_size)
+        # |> Enum.each(&import_app_chunk/1)
+
         {:ok, new_last_fetched_at}
 
       :ignore ->
@@ -189,5 +200,23 @@ defmodule Indexer.Fetcher.PendingTransaction do
         Logger.error(fn -> ["Failed to import: ", inspect(failed_value)] end, step: step)
         :ok
     end
+  end
+
+  defp import_app_chunk(transactions_params) do
+    # convert transactions_params to application_params
+    # application_params is like {:txHash} and the value is from transactions_params
+    transformed_transactions_params = Enum.map(transactions_params, &Applications.transform_application/1)
+
+    application_params =
+      Enum.map(transformed_transactions_params, fn transaction_params ->
+        %{txHash: transaction_params[:hash], contract_address_hash: transaction_params[:contract_address_hash]}
+      end)
+
+    addresses_params = Addresses.extract_addresses(%{applications: application_params}, pending: true)
+
+    Chain.import(%{
+      addresses: %{params: addresses_params, on_conflict: :nothing},
+      applications: %{params: application_params, on_conflict: :nothing}
+    })
   end
 end
