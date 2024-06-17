@@ -34,8 +34,8 @@ services:
         CACHE_TOTAL_GAS_USAGE_COUNTER_ENABLED: ""
         CACHE_ADDRESS_WITH_BALANCES_UPDATE_INTERVAL: ""
         ADMIN_PANEL_ENABLED: ""
-        RELEASE_VERSION: 6.1.0
-        BLOCKSCOUT_VERSION: 6.1.0
+        RELEASE_VERSION: 6.6.0
+        BLOCKSCOUT_VERSION: 6.6.0
     restart: always
     stop_grace_period: 5m
     container_name: 'backend'
