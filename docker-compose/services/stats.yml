@@ -38,13 +38,14 @@ services:
     image: ghcr.io/blockscout/stats:${STATS_DOCKER_TAG:-latest}
     pull_policy: always
     platform: linux/amd64
+    restart: always
     container_name: 'stats'
     extra_hosts:
       - 'host.docker.internal:host-gateway'
     env_file:
       -  ../envs/common-stats.env
     environment:
-      - STATS__DB_URL=postgresql://zerox:ZeroXPass@localhost:5432/stats_db
-      - STATS__BLOCKSCOUT_DB_URL=postgresql://zerox:ZeroXPass@localhost:5432/blockscout
+      - STATS__DB_URL=postgresql://zerox:ZeroXPass@stats-db:5432/stats_db
+      - STATS__BLOCKSCOUT_DB_URL=postgresql://zerox:ZeroXPass@stats_db:5432/blockscout
       - STATS__CREATE_DATABASE=false
       - STATS__RUN_MIGRATIONS=true
