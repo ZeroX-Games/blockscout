@@ -47,5 +47,5 @@ services:
     environment:
       - STATS__DB_URL=postgresql://zerox:ZeroXPass@localhost:5432/stats_db
       - STATS__BLOCKSCOUT_DB_URL=postgresql://zerox:ZeroXPass@localhost:5432/blockscout
-      - STATS__CREATE_DATABASE=${STATS__CREATE_DATABASE:-true}
-      - STATS__RUN_MIGRATIONS=${STATS__RUN_MIGRATIONS:-true}
+      - STATS__CREATE_DATABASE=false
+      - STATS__RUN_MIGRATIONS=true
