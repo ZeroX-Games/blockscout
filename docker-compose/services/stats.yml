@@ -28,7 +28,7 @@ services:
     volumes:
       - ./stats-db-data:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U stats -d stats"]
+      test: ["CMD-SHELL", "pg_isready -U zerox -d stats_db"]
       interval: 10s
       timeout: 5s
       retries: 5
