@@ -68,7 +68,7 @@ RUN mkdir -p /opt/release \
   && mv _build/${MIX_ENV}/rel/blockscout /opt/release
 
 ##############################################################
-FROM hexpm/elixir:1.14.5-erlang-24.2.2-alpine-3.18.2
+FROM hexpm/elixir:1.14.5-erlang-25.0.4-alpine-3.19.1
 
 ARG RELEASE_VERSION
 ENV RELEASE_VERSION=${RELEASE_VERSION}
